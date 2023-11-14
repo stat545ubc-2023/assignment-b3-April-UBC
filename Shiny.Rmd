@@ -1,0 +1,21 @@
+---
+title: "Assignment-B3"
+author: "April Hwang"
+date: "2023-11-14"
+output: html_document
+---
+# Setup
+```{r}
+#install shiny
+library('shiny')
+
+#create new directory
+ui <- fluidPage (
+  'Hello, world!'
+)
+server <- function(input, output, session) {
+}
+shinyApp(ui, server)
+
+```
+
