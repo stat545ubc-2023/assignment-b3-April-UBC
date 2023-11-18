@@ -17,22 +17,24 @@ ui <- fluidPage(
 server <- function(input, output) {
   observe(print(input$murder_slider))
 
-  #murder bar graph
-  output$murder_col <- renderPlot({
+  murder_filtered <- reactive({
     USArrests_edit %>%
       filter(Murder < input$murder_slider [2],
-             Murder > input$murder_slider [1]) %>%
+             Murder > input$murder_slider [1])
+  })
+
+  #murder bar graph
+  output$murder_col <- renderPlot({
+      murder_filtered() %>%
       ggplot(aes(y = Murder,
-                               x = State)) +
+                 x = State)) +
         geom_col() +
       scale_x_discrete(guide = guide_axis(n.dodge=3))
   })
 
   #murder table
   output$murder_table <- renderTable({
-    USArrests_edit %>%
-      filter(Murder < input$murder_slider [2],
-             Murder > input$murder_slider [1])
+    murder_filtered()
   })
 }
 
