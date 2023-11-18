@@ -1,51 +1,40 @@
-#
-# This is a Shiny web application. You can run the application by clicking
-# the 'Run App' button above.
-#
-# Find out more about building applications with Shiny here:
-#
-#    http://shiny.rstudio.com/
-#
-
 library(shiny)
+library(ggplot2)
+library(dbplyr)
+library(tidyverse)
+library(here)
 
-# Define UI for application that draws a histogram
+USArrests_edit <- read_csv(here('USArrests.csv'))
+
 ui <- fluidPage(
-
-    # Application title
-    titlePanel("Old Faithful Geyser Data"),
-
-    # Sidebar with a slider input for number of bins 
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-           plotOutput("distPlot")
-        )
-    )
+  titlePanel("Murder Arrest Statistics in the US"),
+  sliderInput('murder_slider', 'Murder arrests per 100,000 residents', min = 0, max = 20,
+              value = c(0, 5)),
+  plotOutput('murder_col'),
+  tableOutput('murder_table')
 )
 
-# Define server logic required to draw a histogram
 server <- function(input, output) {
+  observe(print(input$murder_slider))
 
-    output$distPlot <- renderPlot({
-        # generate bins based on input$bins from ui.R
-        x    <- faithful[, 2]
-        bins <- seq(min(x), max(x), length.out = input$bins + 1)
+  #murder bar graph
+  output$murder_col <- renderPlot({
+    USArrests_edit %>%
+      filter(Murder < input$murder_slider [2],
+             Murder > input$murder_slider [1]) %>%
+      ggplot(aes(y = Murder,
+                               x = State)) +
+        geom_col() +
+      scale_x_discrete(guide = guide_axis(n.dodge=3))
+  })
 
-        # draw the histogram with the specified number of bins
-        hist(x, breaks = bins, col = 'darkgray', border = 'white',
-             xlab = 'Waiting time to next eruption (in mins)',
-             main = 'Histogram of waiting times')
-    })
+  #murder table
+  output$murder_table <- renderTable({
+    USArrests_edit %>%
+      filter(Murder < input$murder_slider [2],
+             Murder > input$murder_slider [1])
+  })
 }
 
-# Run the application 
 shinyApp(ui = ui, server = server)
+
