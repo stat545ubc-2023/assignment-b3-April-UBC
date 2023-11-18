@@ -8,10 +8,16 @@ USArrests_edit <- read_csv(here('USArrests.csv'))
 
 ui <- fluidPage(
   titlePanel("Murder Arrest Statistics in the US"),
-  sliderInput('murder_slider', 'Murder arrests per 100,000 residents', min = 0, max = 20,
-              value = c(0, 5)),
-  plotOutput('murder_col'),
-  tableOutput('murder_table')
+  sidebarLayout(
+    sidebarPanel(
+      sliderInput('murder_slider', 'Murder arrests per 100,000 residents', min = 0, max = 20,
+                  value = c(0, 5))
+    ),
+    mainPanel(
+      plotOutput('murder_col'),
+      tableOutput('murder_table')
+    )
+  )
 )
 
 server <- function(input, output) {
