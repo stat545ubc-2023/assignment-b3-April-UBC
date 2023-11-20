@@ -2,7 +2,7 @@
 #feature 1 - add a map of the US to the UI. This can be useful for users to visualize geographical location of the states and also make the app more visually interesting.
 #feature 2 - add interactive bar graph. This can be useful to help users to visually compare murder arrest rates between the different states, and view states within a chosen arrest range.
 #feature 3 - add interactive table. This can be useful to help users to quickly view the exact arrest numbers, compare the rate between the different states, and view states within a chosen arrest range.
-#feature 4 - add sidebarPanel
+#feature 4 - add sidebarPanel and mainPanel to reorganize the page to make it more visually aesthetic
 
 library(shiny)
 library(ggplot2)
